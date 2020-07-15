@@ -16,19 +16,30 @@ public class PaymentInformation {
 
     @PostUpdate
     public void onPostUpdate(){
-        PaymentCanceled paymentCanceled = new PaymentCanceled();
-        BeanUtils.copyProperties(this, paymentCanceled);
-        paymentCanceled.publishAfterCommit();
-
+        if (this.getPaymentStatus().equals("CANCEL")) {
+            PaymentCanceled paymentCanceled = new PaymentCanceled();
+            BeanUtils.copyProperties(this, paymentCanceled);
+            paymentCanceled.publishAfterCommit();
+        }
 
     }
 
+    @PostPersist
+    public void onPostPersist(){
+        if (this.getPaymentStatus().equals("APPROVED")) {
+            //this.setPaymentStatus("APPROVED");
+            PaymentApproved paymentApproved = new PaymentApproved();
+            BeanUtils.copyProperties(this, paymentApproved);
+            paymentApproved.publishAfterCommit();
+        }
+
+    }
     @PrePersist
     public void onPrePersist(){
-        PaymentApproved paymentApproved = new PaymentApproved();
-        BeanUtils.copyProperties(this, paymentApproved);
-        paymentApproved.publishAfterCommit();
+        if (this.getPaymentStatus().equals("ORDER")) {
+            this.setPaymentStatus("APPROVED");
 
+        }
 
     }
 

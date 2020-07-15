@@ -27,13 +27,13 @@ public class PolicyHandler{
 
             System.out.println("##### listener PamentCancelReq : " + iceCreamOrderCanceled.toJson());
             // 객체 조회
-            List<PaymentInformation> paymentInformationList = paymentInformationRepository.findByOrderId(iceCreamOrderCanceled.getId());
-            for(PaymentInformation paymentInformation : paymentInformationList){
+            PaymentInformation paymentInformation = paymentInformationRepository.findByOrderId(iceCreamOrderCanceled.getId());
+
                 // 상태값 set 함
                 paymentInformation.setPaymentStatus("CANCEL");
                 // 레파지 토리에 save
                 paymentInformationRepository.save(paymentInformation);
-            }
+
         }
     }
 

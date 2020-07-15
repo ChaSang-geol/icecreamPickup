@@ -19,27 +19,30 @@ public class Order {
 
     @PostPersist
     public void onPostPersist(){
-        IceCreamOrdered iceCreamOrdered = new IceCreamOrdered();
-        BeanUtils.copyProperties(this, iceCreamOrdered);
-        iceCreamOrdered.publishAfterCommit();
+        if (this.getOrderStatus().equals("ORDER") & this.getProductId() != null )  {
+            IceCreamOrdered iceCreamOrdered = new IceCreamOrdered();
+            BeanUtils.copyProperties(this, iceCreamOrdered);
+            iceCreamOrdered.publishAfterCommit();
 
-        //Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+            //Following code causes dependency to external APIs
+            // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
-        icecreamPickup.external.PaymentInformation paymentInformation = new icecreamPickup.external.PaymentInformation();
-        // mappings goes here
-        IcecreamorderApplication.applicationContext.getBean(icecreamPickup.external.PaymentInformationService.class)
-            .payment(paymentInformation);
+            icecreamPickup.external.PaymentInformation paymentInformation = new icecreamPickup.external.PaymentInformation();
+            // mappings goes here
+            paymentInformation.setOrderId(this.getId());
+            paymentInformation.setPaymentStatus("ORDER");
+            IcecreamorderApplication.applicationContext.getBean(icecreamPickup.external.PaymentInformationService.class).payment(paymentInformation);
 
-
+        }
     }
 
     @PostUpdate
     public void onPostUpdate(){
-        IceCreamOrderCanceled iceCreamOrderCanceled = new IceCreamOrderCanceled();
-        BeanUtils.copyProperties(this, iceCreamOrderCanceled);
-        iceCreamOrderCanceled.publishAfterCommit();
-
+        if (this.getOrderStatus().equals("CANCEL") ){
+            IceCreamOrderCanceled iceCreamOrderCanceled = new IceCreamOrderCanceled();
+            BeanUtils.copyProperties(this, iceCreamOrderCanceled);
+            iceCreamOrderCanceled.publishAfterCommit();
+        }
 
     }
 
