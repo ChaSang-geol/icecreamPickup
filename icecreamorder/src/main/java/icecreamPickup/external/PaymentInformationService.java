@@ -1,4 +1,3 @@
-
 package icecreamPickup.external;
 
 import org.springframework.cloud.openfeign.FeignClient;

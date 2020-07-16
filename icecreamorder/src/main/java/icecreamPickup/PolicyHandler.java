@@ -26,11 +26,11 @@ public class PolicyHandler{
 
         if(storeOrderReceived.isMe()){
             System.out.println("##### listener OrderStatusUpdate : " + storeOrderReceived.toJson());
-            //Optional<Order> orders = orderRepository.findById(storeOrderReceived.getOrderId());
-            Order icecreamorders = new Order();
-            icecreamorders.setOrderStatus(storeOrderReceived.getStatus());
+           Optional<Order> icecreamorders = orderRepository.findById(storeOrderReceived.getOrderId());
+            //Order icecreamorders = new Order();
+            icecreamorders.get().setOrderStatus(storeOrderReceived.getStatus());
             // 레파지 토리에 save
-            orderRepository.save(icecreamorders);
+            orderRepository.save(icecreamorders.get());
         }
     }
     @StreamListener(KafkaProcessor.INPUT)
@@ -38,10 +38,12 @@ public class PolicyHandler{
 
         if(packed.isMe()){
             System.out.println("##### listener OrderStatusUpdate : " + packed.toJson());
-            Order icecreamorders = new Order();
-            icecreamorders.setOrderStatus("READY");
+            //Order icecreamorders = new Order();
+            //icecreamorders.setOrderStatus("READY");
+            Optional<Order> icecreamorders = orderRepository.findById(packed.getOrderId());
+            icecreamorders.get().setOrderStatus(packed.getStatus());
             // 레파지 토리에 save
-            orderRepository.save(icecreamorders);
+            orderRepository.save(icecreamorders.get());
         }
     }
     @StreamListener(KafkaProcessor.INPUT)
@@ -49,10 +51,12 @@ public class PolicyHandler{
 
         if(pickedUp.isMe()){
             System.out.println("##### listener OrderStatusUpdate : " + pickedUp.toJson());
-            Order icecreamorders = new Order();
-            icecreamorders.setOrderStatus("COMPLETE");
+
+            Optional<Order> icecreamorders = orderRepository.findById(pickedUp.getOrderId());
+            icecreamorders.get().setOrderStatus(pickedUp.getStatus());
+            //icecreamorders.setOrderStatus("COMPLETE");
             // 레파지 토리에 save
-            orderRepository.save(icecreamorders);
+            orderRepository.save(icecreamorders.get());
         }
     }
 

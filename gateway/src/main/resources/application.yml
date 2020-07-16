@@ -8,26 +8,22 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: icecreamorder
+        - id: icecreampickup-icecreamorder
           uri: http://localhost:8081
           predicates:
             - Path=/orders/**
         - id: store
           uri: http://localhost:8082
           predicates:
-            - Path=/sales/**
+            - Path=/saleses/**
         - id: pay
           uri: http://localhost:8083
           predicates:
-            - Path=/paymentInformations/** 
+            - Path=/paymentInformations/**
         - id: storesales
           uri: http://localhost:8084
           predicates:
-            - Path=/storesales/**
-        - id: customerservice
-          uri: http://localhost:8085
-          predicates:
-            - Path=/reviews/** 
+            - Path=/storeSalesViews/**
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -47,26 +43,22 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: icecreamorder
-          uri: http://icecreamorder:8080
+        - id: icecreampickup-icecreamorder
+          uri: http://icecreampickup-icecreamorder:8080
           predicates:
             - Path=/orders/**
-        - id: store
-          uri: http://store:8080
+        - id: icecreampickup-store
+          uri: http://icecreampickup-store:8080
           predicates:
-            - Path=/sales/**
-        - id: pay
-          uri: http://pay:8080
+            - Path=/saleses/**
+        - id: icecreampickup-pay
+          uri: http://icecreampickup-pay:8080
           predicates:
-            - Path=/paymentInformations/** 
-        - id: storesales
-          uri: http://storesales:8080
+            - Path=/paymentInformations/**
+        - id: icecreampickup-storesales
+          uri: http://icecreampickup-storesales:8080
           predicates:
-            - Path=/storesales/**
-        - id: customerservice
-          uri: http://customerservice:8080
-          predicates:
-            - Path=/reviews/** 
+            - Path=/storeSalesViews/**
       globalcors:
         corsConfigurations:
           '[/**]':
