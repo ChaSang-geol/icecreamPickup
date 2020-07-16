@@ -27,3 +27,9 @@
 ## 이벤트스토밍 결과 모델
 http://msaez.io/#/storming/tumGnckjgrc4UVXq2EBT4EFYhnT2/mine/2917e88a6d4dba0647c591d614a87766/-MBZKH7RqZmoriv609f3
 
+### 설계 중 이벤트스토밍
+![image](https://user-images.githubusercontent.com/56263370/87503600-9fb8a780-c69f-11ea-9920-d4f8add392d6.png)
+
+### 이벤트스토밍 최종 결과
+![image](https://user-images.githubusercontent.com/56263370/87503406-186b3400-c69f-11ea-82e1-3acb967c40d5.png)
+
