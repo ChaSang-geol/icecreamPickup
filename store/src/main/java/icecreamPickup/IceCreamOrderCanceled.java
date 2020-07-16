@@ -1,4 +1,3 @@
-
 package icecreamPickup;
 
 public class IceCreamOrderCanceled extends AbstractEvent {

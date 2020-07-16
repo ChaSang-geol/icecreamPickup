@@ -1,4 +1,3 @@
-
 package icecreamPickup;
 
 public class PaymentApproved extends AbstractEvent {

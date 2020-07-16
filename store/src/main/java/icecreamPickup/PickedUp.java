@@ -1,4 +1,3 @@
-
 package icecreamPickup;
 
 public class PickedUp extends AbstractEvent {

@@ -33,8 +33,7 @@ public class PolicyHandler{
                 paymentInformation.setPaymentStatus("CANCEL");
                 // 레파지 토리에 save
                 paymentInformationRepository.save(paymentInformation);
-
+            }
         }
-    }
 
 }

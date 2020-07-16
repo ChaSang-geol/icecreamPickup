@@ -17,28 +17,61 @@ public class Sales {
 
     @PostPersist
     public void onPostPersist(){
-        StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
-        BeanUtils.copyProperties(this, storeOrderReceived);
-        storeOrderReceived.publishAfterCommit();
+        if(this.getStatus().equals("WAITING")) {
+            StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
 
+            storeOrderReceived.setId(this.getId());
+            storeOrderReceived.setOrderId(this.getOrderId());
+            storeOrderReceived.setStoreId(this.getStoreId());
+
+            BeanUtils.copyProperties(this, storeOrderReceived);
+            storeOrderReceived.publishAfterCommit();
+        } else if(this.getStatus().equals("ACCEPT")) {
+            StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
+
+            storeOrderReceived.setId(this.getId());
+            storeOrderReceived.setOrderId(this.getOrderId());
+            storeOrderReceived.setStoreId(this.getStoreId());
+            storeOrderReceived.setStatus("ACCEPT");
+
+            BeanUtils.copyProperties(this, storeOrderReceived);
+            storeOrderReceived.publishAfterCommit();
+        }
 
     }
 
     @PostUpdate
     public void onPostUpdate(){
-        PickedUp pickedUp = new PickedUp();
-        BeanUtils.copyProperties(this, pickedUp);
-        pickedUp.publishAfterCommit();
+        if(this.getStatus().equals("COMPLETE")) {
+            PickedUp pickedUp = new PickedUp();
+            BeanUtils.copyProperties(this, pickedUp);
+            pickedUp.publishAfterCommit();
+        }
+        if(this.getStatus().equals("READY")) {
+            Packed packed = new Packed();
+            BeanUtils.copyProperties(this, packed);
+            packed.publishAfterCommit();
+            // 여기 메시지 발송 부분
+            System.out.println("## 주문한 아이스크림 포장이 완료되었습니다.");
+        }
+        if(this.getStatus().equals("CANCEL")) {
+            OrderCanceled orderCanceled = new OrderCanceled();
+            BeanUtils.copyProperties(this, orderCanceled);
+            orderCanceled.publishAfterCommit();
+        }
+        if(this.getStatus().equals("ACCEPT")) {
+            StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
 
+            storeOrderReceived.setId(this.getId());
+            storeOrderReceived.setOrderId(this.getOrderId());
+            storeOrderReceived.setStoreId(this.getStoreId());
+            storeOrderReceived.setStatus("ACCEPT");
 
-        Packed packed = new Packed();
-        BeanUtils.copyProperties(this, packed);
-        packed.publishAfterCommit();
-
-
-        OrderCanceled orderCanceled = new OrderCanceled();
-        BeanUtils.copyProperties(this, orderCanceled);
-        orderCanceled.publishAfterCommit();
+            BeanUtils.copyProperties(this, storeOrderReceived);
+            storeOrderReceived.publishAfterCommit();
+            // 여기 메시지 발송 부분
+            System.out.println("## 매장에 주문이 접수되었습니다.");
+        }
 
 
     }

@@ -1,4 +1,3 @@
-
 package icecreamPickup;
 
 public class StoreOrderReceived extends AbstractEvent {

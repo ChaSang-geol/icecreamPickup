@@ -1,4 +1,3 @@
-
 package icecreamPickup;
 
 public class Packed extends AbstractEvent {
