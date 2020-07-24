@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: icecreamorder-pod
+  labels:
+    env: icecreamorder
+spec:
+  containers:
+  - name: icecreampickup-icecreamorder
+    image: jjangee0918/icecreampickup-icecreamorder:v1

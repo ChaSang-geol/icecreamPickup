@@ -16,12 +16,13 @@ public class PaymentInformation {
     private Long id;
     private Long orderId;
     private String paymentStatus;
-/*
+
     @PostUpdate
     public void onPostUpdate(){
         if (this.getPaymentStatus().equals("CANCEL")) {
             PaymentCanceled paymentCanceled = new PaymentCanceled();
             BeanUtils.copyProperties(this, paymentCanceled);
+            paymentCanceled.setPaymentStatus("CANCEL");
             paymentCanceled.publishAfterCommit();
         }
 
@@ -31,14 +32,27 @@ public class PaymentInformation {
     public void onPostPersist(){
         if (this.getPaymentStatus().equals("APPROVED")) {
             //this.setPaymentStatus("APPROVED");
+            System.out.println("### onPostPersist : PaymentInfomation -> APPROVED ");
             PaymentApproved paymentApproved = new PaymentApproved();
             BeanUtils.copyProperties(this, paymentApproved);
+            paymentApproved.setPaymentStatus("APPROVED");
+            paymentApproved.publishAfterCommit();
+        } else if (this.getPaymentStatus().equals("CANCEL")) {
+            System.out.println("### onPostPersist : PaymentInfomation -> CANCEL ");
+            PaymentCanceled paymentCanceled = new PaymentCanceled();
+            BeanUtils.copyProperties(this, paymentCanceled);
+            paymentCanceled.setPaymentStatus("CANCEL");
+            paymentCanceled.publishAfterCommit();
+        } else {
+            System.out.println("### onPostPersist : PaymentInfomation -> ORDER ");
+            PaymentApproved paymentApproved = new PaymentApproved();
+            BeanUtils.copyProperties(this, paymentApproved);
+            paymentApproved.setPaymentStatus("APPROVED");
             paymentApproved.publishAfterCommit();
         }
-
     }
 
- */
+
     @PrePersist
     public void onPrePersist(){
         /*
@@ -53,12 +67,13 @@ public class PaymentInformation {
 
         }else{
             PaymentApproved paymentApproved = new PaymentApproved();
+            this.setPaymentStatus("APPROVED");
             BeanUtils.copyProperties(this, paymentApproved);
-            paymentApproved.setPaymentStatus("APPROVED");
+            //paymentApproved.setPaymentStatus("APPROVED");
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                 @Override
                 public void beforeCommit(boolean readOnly) {
-                    paymentApproved.publish();
+                //paymentApproved.publish();
                 }
             });
 
@@ -68,6 +83,7 @@ public class PaymentInformation {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
 */
         }
 

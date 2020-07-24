@@ -18,6 +18,8 @@ public class Sales {
     @PostPersist
     public void onPostPersist(){
         if(this.getStatus().equals("WAITING")) {
+            System.out.println("## StoreOrderReceived : WAITING ");
+            /*
             StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
 
             storeOrderReceived.setId(this.getId());
@@ -26,7 +28,9 @@ public class Sales {
 
             BeanUtils.copyProperties(this, storeOrderReceived);
             storeOrderReceived.publishAfterCommit();
+            */
         } else if(this.getStatus().equals("ACCEPT")) {
+            System.out.println("## StoreOrderReceived : ACCEPT ");
             StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
 
             storeOrderReceived.setId(this.getId());
@@ -71,6 +75,19 @@ public class Sales {
             storeOrderReceived.publishAfterCommit();
             // 여기 메시지 발송 부분
             System.out.println("## 매장에 주문이 접수되었습니다.");
+        }
+        if(this.getStatus().equals("WAITING")) { // IceCreamOrdered  receive
+            System.out.println("## StoreOrderReceived : WAITING -> IceCreamOrdered received ");
+            StoreOrderReceived storeOrderReceived = new StoreOrderReceived();
+/*
+            storeOrderReceived.setId(this.getId());
+            storeOrderReceived.setOrderId(this.getOrderId());
+            storeOrderReceived.setStoreId(this.getStoreId());
+            storeOrderReceived.setStatus(this.getStatus());
+*/
+            BeanUtils.copyProperties(this, storeOrderReceived);
+            storeOrderReceived.publishAfterCommit();
+
         }
 
 

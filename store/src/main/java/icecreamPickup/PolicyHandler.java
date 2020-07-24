@@ -8,10 +8,15 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PolicyHandler{
     @Autowired
     private SalesRepository salesRepository;
+
+    // view 객체 생성
+    //private Sales storesales = new Sales();
 
     @StreamListener(KafkaProcessor.INPUT)
     public void onStringEventListener(@Payload String eventString){
@@ -23,11 +28,11 @@ public class PolicyHandler{
 
         if(iceCreamOrderCanceled.isMe()){
             System.out.println("##### listener OrderCancelReq : " + iceCreamOrderCanceled.toJson());
-            Sales storesales = new Sales();
-            storesales = salesRepository.findByOrderId(iceCreamOrderCanceled.getId());
-            storesales.setStatus("CANCEL");
+            Sales cancelstoresales = new Sales();
+            cancelstoresales = salesRepository.findByOrderId(iceCreamOrderCanceled.getId());
+            cancelstoresales.setStatus("CANCEL");
             // 레파지 토리에 save
-            salesRepository.save(storesales);
+            salesRepository.save(cancelstoresales);
         }
     }
     @StreamListener(KafkaProcessor.INPUT)
@@ -35,14 +40,49 @@ public class PolicyHandler{
 
         if(paymentApproved.isMe()){
             System.out.println("##### listener StoreOrderAcceptReq : " + paymentApproved.toJson());
-            Sales storesales = new Sales();
-            //storesales = salesRepository.findByOrderId(paymentApproved.getOrderId());
-            storesales.setOrderId(paymentApproved.getOrderId());
-            storesales.setStoreId(Long.valueOf(1));
-            storesales.setStatus("WAITING");
-            // 레파지 토리에 save
-            salesRepository.save(storesales);
+            if ("APPROVED".equals(paymentApproved.getPaymentStatus())){
 
+                try {
+                    Sales storesales = new Sales();
+
+                    //Sales storesales = salesRepository.findByOrderId(paymentApproved.getOrderId());
+
+                    storesales.setOrderId(paymentApproved.getOrderId());
+                    // 레파지 토리에 save
+                    //storesales.setStoreId(Long.valueOf(1));
+                    // 레파지 토리에 save
+
+                    storesales.setStatus("WAITING");
+                    salesRepository.save(storesales);
+
+                } catch (Exception e) {
+                    System.out.println("#####   Error : paymentApproved #########");
+                    e.printStackTrace();
+
+                }
+            }
+        }
+    }
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenIceCreamOrdered_then_CREATE_ (@Payload IceCreamOrdered iceCreamOrdered) {
+        try {
+            if (iceCreamOrdered.isMe()) {
+                Sales storesales = new Sales();
+                storesales = salesRepository.findByOrderId(iceCreamOrdered.getId());
+                // 이벤트의 Value 를 set 함
+                if (storesales.getId() != null) {
+                    //storesales.setOrderId(iceCreamOrdered.getId());
+                    //storesales.setProductName(iceCreamOrdered.getProductName());
+                    storesales.setStoreId(iceCreamOrdered.getStoreId());
+                    //storesales.setCustomerName(iceCreamOrdered.getCustomerName());
+                    //storesales.setStatus(iceCreamOrdered.getOrderStatus());
+                    // view 레파지 토리에 save
+                    salesRepository.save(storesales);
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
     /*

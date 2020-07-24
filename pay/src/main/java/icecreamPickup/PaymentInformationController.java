@@ -24,6 +24,7 @@ public class PaymentInformationController {
 
 
      */
+    /*
     @ResponseBody
     @RequestMapping(value = "/paymentInformations", method = RequestMethod.POST)
     //@RequestMapping(method=RequestMethod.POST, path="/paymentInformations")
@@ -41,4 +42,6 @@ public class PaymentInformationController {
         return paymentInformationList;
 
     }
+
+     */
 }
